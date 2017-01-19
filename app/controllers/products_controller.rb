@@ -8,6 +8,13 @@ class ProductsController < ApplicationController
 
   end
 
+  def get_camel
+    @products = Product.all 
+    @first_product = Product.first
+    @camel_image = Product.first
+    render "camel.html.erb"
+  end
+
 
 
 end

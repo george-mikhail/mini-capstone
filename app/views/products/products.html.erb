@@ -1,7 +1,9 @@
-<div class="containter"
-
-  <h1>Hello World!</h1>
-  <h2>Products:</h2>
-  <p><%= @first_product %></p>
-
+<div class="container">
+  <h1>Products:</h1>
+  <% @products.each do |product| %>
+  <p><%= product.name %><p>
+  <p><%= product.price %><p>
+  <p> <img src="<%=product.image%>"></img><p>
+  <p><%= product.description %><p>
+  <% end %>
 </div>
