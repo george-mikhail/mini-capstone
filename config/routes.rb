@@ -1,10 +1,22 @@
 Rails.application.routes.draw do
 
-  get "/products" => "products#get_products"
+  get "/products" => "products#index"
 
   get "/camel" => "products#get_camel"
 
+  get "products/new" => "products#new"
+
+  post "/products" => "products#create"
+
+  get "/products/:id" =>
+  "products#show"
+
+  get "/products/:id/edit" => "products#edit"
+
+  patch "/products/:id" => "products#update"
+
+  delete "/products/:id" => "products#destory"
 
 
-  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
+
 end

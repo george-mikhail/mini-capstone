@@ -1,0 +1,23 @@
+
+  <h1>Products:</h1>
+  
+  <% @products.each_slice(3) do |three_products| %>
+
+    <div class="row">
+    
+      <% three_products.each do |product| %>
+        <div class ="col-md-4 col-sm-4">
+          <div class="well">
+
+
+          <a href="/products/<%= product.id %>">Name: <%= product.name %></a>
+          <p>Price: <%= product.price %></p>
+          <p> <img src="<%=product.image%>" style="height:200px;width:300px"> </img></p>
+          <p>Description: <%= product.description %></p>
+          <br></br>
+          </div>
+        </div>
+
+      <% end %>
+    </div>
+  <% end %>
