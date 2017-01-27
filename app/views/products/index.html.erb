@@ -1,5 +1,8 @@
 
   <h1>Products:</h1>
+  <span><a href="/products?sort=price&sort_order=asc">Sort by Price (low to high)</a></span>
+  <br></br>
+  <span><a href="/products?sort=price&sort_order=DESC">Sort by Price (high to low)</a></span>
   
   <% @products.each_slice(3) do |three_products| %>
 

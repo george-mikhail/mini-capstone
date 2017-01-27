@@ -3,7 +3,9 @@ class ProductsController < ApplicationController
   def index
     @first_product = Product.first
     @products = Product.all
-
+    if params[:sort]
+      @products = Product.all.order(params[:sort] => params[:sort_order])
+    end
     render "index.html.erb"
 
   end
@@ -13,6 +15,13 @@ class ProductsController < ApplicationController
     @first_product = Product.first
     @camel_image = Product.first
     render "camel.html.erb"
+  end
+
+  def search
+
+    search_term = params[:search]
+    @products = Product.where("name LIKE ?", "%#{search_term}%")
+    render :index
   end
 
   def new
@@ -34,6 +43,10 @@ class ProductsController < ApplicationController
 
   def show
     @product = Product.find_by(id: params[:id])
+    product_id = params[:id]
+    if product_id == "random"
+      @product = Product.all.sample
+    end
     render "show.html.erb"
   end
 
