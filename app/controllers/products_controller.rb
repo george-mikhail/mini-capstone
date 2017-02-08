@@ -1,11 +1,23 @@
 class ProductsController < ApplicationController
 
   def index
+    if session[:count] == nil
+      session[:count] = 0
+    end
+
+    session[:count] += 1
+    @visit_count = session[:count]
     @first_product = Product.first
     @products = Product.all
+
     if params[:sort]
       @products = Product.all.order(params[:sort] => params[:sort_order])
     end
+
+    if params[:category]
+      @products = Category.find_by(name: params[:category]).products
+    end
+    
     render "index.html.erb"
 
   end
@@ -44,6 +56,8 @@ class ProductsController < ApplicationController
   def show
     @product = Product.find_by(id: params[:id])
     product_id = params[:id]
+    @supplier = @product.supplier
+    @images = @product.images
     if product_id == "random"
       @product = Product.all.sample
     end

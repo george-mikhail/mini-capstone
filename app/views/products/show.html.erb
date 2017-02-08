@@ -1,10 +1,22 @@
 <p>Product: <%= @product.name %><p>
   <p> <%= @product.sale_message %> </p>
+
+  <p>Categories:</p>
+  <% @product.categories.each do |category| %>
+  <p><%= category.name %></p>
+  <% end %>
+
+
   <p>Price: <%= @product.price %><p>
   <p> Tax: <%= number_to_currency(@product.tax) %> </p>
   <p> Total: <%= number_to_currency(@product.total) %> </p>
-  <p> <img src="<%=@product.image%>" style="height:200px;width:300px"></img><p>
+  <p> 
+    <% @images.each do |image| %>
+    <img src="<%= image.url %>" style="height:200px;width:300px"></img>
+     <% end %>
+  <p>
   <p><%= @product.description %><p>
+  <span><p>Supplied by: <%= @supplier.name %></p></span>
   </p>
 
   <a class="btn btn-default" href="/products/<%= @product.id %>/edit">Edit</a>
@@ -14,3 +26,16 @@
 <%= form_tag "/products/#{@product.id}", method: :delete do %>
 <input type="submit" class="btn btn-default" value="Delete product">
 <% end %>
+
+<br>
+
+<%= form_tag "/carted_products", method: :post do %>
+              <div>
+                <%= label_tag :quantity %>
+                <%= text_field_tag :quantity %>
+
+                <%= hidden_field_tag :product_id, @product.id %>
+                
+                <%= submit_tag "Add to Cart!" %>
+              </div>
+            <% end %>

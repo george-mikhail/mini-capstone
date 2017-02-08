@@ -1,5 +1,12 @@
 class Product < ApplicationRecord
 
+  belongs_to :supplier
+  has_many :images
+  has_many :categorized_products
+  has_many :categories, through: :categorized_products
+  has_many :carted_products
+  
+
   def tax
 
     price.to_f * 0.09
