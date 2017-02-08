@@ -1,5 +1,7 @@
 class ProductsController < ApplicationController
 
+  before_action :authenticate_admin!, except: [:index, :show, :search]
+
   def index
     if session[:count] == nil
       session[:count] = 0
@@ -37,31 +39,35 @@ class ProductsController < ApplicationController
   end
 
   def new
-    render "new.html.erb"
+    @product = Product.new
 
   end
 
   def create
-    product = Product.create(name: params['name'],
-      price: params['price'],
-      image: params['image'],
-      description: params['description']
+    @product = Product.create(
+      name: params[:name],
+      description: params[:description],
+      price: params[:price],
+      supplier_id: params[:supplier]['supplier_id']
       )
-    flash[:success] = "Product successfully created!"
-    redirect_to "/products/#{product.id}"
+
+    if @product.save
+      flash[:success] = "Product Created"
+      redirect_to "/products/#{@product.id}"
+    else
+      render :new
+    end
+    # @product.images.create(url: params[:image], product_id: @product.id)
 
   end
 
 
   def show
     @product = Product.find_by(id: params[:id])
-    product_id = params[:id]
+    #returns single instance supplier hash
     @supplier = @product.supplier
+    #returns array with image hashes
     @images = @product.images
-    if product_id == "random"
-      @product = Product.all.sample
-    end
-    render "show.html.erb"
   end
 
   def edit
@@ -83,11 +89,14 @@ class ProductsController < ApplicationController
   end
 
   def destory
+
+
     product_id = params[:id]
     product = Product.find_by(id:product_id)
     product.destory
     flash[:warning] = "Product successfully deleted!"
     redirect_to "/products"
+
 
   end
 

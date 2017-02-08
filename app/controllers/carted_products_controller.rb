@@ -1,5 +1,17 @@
 class CartedProductsController < ApplicationController
 
+ #user_id, product_id, quantity, status, order_id
+  def index
+    #show all carted products where user_id = current_user.id && where status = "carted"
+    if current_user.carted_products.where(status: "carted").any?
+      @carted_products = current_user.carted_products.where(status: "carted")
+    else
+      flash[:warning] = "You have no items in your cart!"
+      redirect_to "/products"
+    end
+
+  end
+
   def create
     product_id = params[:product_id]
     quantity = params[:quantity]
@@ -10,34 +22,17 @@ class CartedProductsController < ApplicationController
       status: "carted"
     )
 
-    flash[:success] = "Carted Product Successfully created"
-
+    flash[:success] = "Item Successfully added to Cart"
     redirect_to "/products" 
   end
 
-  def show
-    @carted_product = CartedProduct.find_by(id: params[:id])
-  end
-
-  def index
-    if current_user.carted_products.where(status: "carted").any?
-      @carted_products = current_user.carted_products.where(status: "carted")
-     else
-       flash[:warning] = "You have no items in your cart"
-       redirect_to "/"
-    end
-
-
-  end
-
   def destroy
+    #locate product to "delete", change status to "removed"
     carted_product = CartedProduct.find_by(id: params[:id])
     carted_product.update(status: "removed")
 
     flash[:success] = "Product Removed"
     redirect_to "/carted_products"
-
-    
   end
 
 

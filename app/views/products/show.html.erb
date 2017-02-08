@@ -1,41 +1,40 @@
-<p>Product: <%= @product.name %><p>
-  <p> <%= @product.sale_message %> </p>
-
-  <p>Categories:</p>
-  <% @product.categories.each do |category| %>
-  <p><%= category.name %></p>
-  <% end %>
-
-
-  <p>Price: <%= @product.price %><p>
-  <p> Tax: <%= number_to_currency(@product.tax) %> </p>
-  <p> Total: <%= number_to_currency(@product.total) %> </p>
-  <p> 
-    <% @images.each do |image| %>
-    <img src="<%= image.url %>" style="height:200px;width:300px"></img>
-     <% end %>
-  <p>
-  <p><%= @product.description %><p>
-  <span><p>Supplied by: <%= @supplier.name %></p></span>
-  </p>
-
-  <a class="btn btn-default" href="/products/<%= @product.id %>/edit">Edit</a>
-
-  <br></br>
-
-<%= form_tag "/products/#{@product.id}", method: :delete do %>
-<input type="submit" class="btn btn-default" value="Delete product">
-<% end %>
-
-<br>
-
-<%= form_tag "/carted_products", method: :post do %>
-              <div>
-                <%= label_tag :quantity %>
-                <%= text_field_tag :quantity %>
-
-                <%= hidden_field_tag :product_id, @product.id %>
-                
-                <%= submit_tag "Add to Cart!" %>
-              </div>
+<section>
+    <div class="row">    
+      <div class="col-sm-8 col-sm-offset-2">
+        <div class="product_single">
+            <h2><%= @product.name %></h2>
+            <span><p>Supplied by: <%= @supplier.name %></p></span>
+            <p>Price: <%= @product.price %></p>
+            <h4>Categories:</h4>
+            <% @product.categories.each do |category| %>
+              <p><%= category.name %></p>
             <% end %>
+            
+            <% @images.each do |image| %>
+              <img src="<%= image.url %>" alt="<%= @product.name %>" class="img-responsive">
+            <% end %>
+
+            <p>Description: <%= @product.description %></p>
+
+            <% if current_user && current_user.admin %>          
+              <%= link_to "Edit", "/products/#{@product.id}/edit", class: "btn btn-success" %>
+              <%= link_to "Delete", "/products/#{@product.id}", {method: :delete, class: "btn btn-danger" }%>
+            <% end %>
+  
+            <% if current_user %>
+              <%= form_tag "/carted_products", method: :post do %>
+                <div>
+                  <%= label_tag :quantity %>
+                  <%= text_field_tag :quantity %>
+
+                  <%= hidden_field_tag :product_id, @product.id %>
+                  
+                  <%= submit_tag "Add to Cart" %>
+                </div>
+              <% end %>
+            <% end %>
+
+        </div>
+      </div>
+    </div>
+  </section>
